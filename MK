@@ -1,0 +1,82 @@
+https://colab.research.google.com/drive/1-bnzUzDQH1dEQv-tHjMB13nQ5cxVZbWX?usp=sharing
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+<b>Now we have to use some library as pandas,numpy,matplotlib,statsmodel and other according to our need</b>
+
+import pandas as pd # import pandas library
+import numpy as np# numpy also impotade
+import matplotlib.pyplot as plt#matplotlib imported
+import os #os imported
+import statsmodels.api as ss
+
+mk=pd.read_csv('/content/drive/MyDrive/DATA SETS/Microsoft_Stock.csv',parse_dates=True)#read csv file 
+mk.index.freq='MS'# For data ordered by months
+mk=mk.set_index('Date')
+mk
+
+out put:-
+	
+	Open	High	Low	Close	Volume
+Date					
+4/1/2015 16:00:00	40.60	40.76	40.31	40.72	36865322
+4/2/2015 16:00:00	40.66	40.74	40.12	40.29	37487476
+4/6/2015 16:00:00	40.34	41.78	40.18	41.55	39223692
+4/7/2015 16:00:00	41.61	41.91	41.31	41.53	28809375
+4/8/2015 16:00:00	41.48	41.69	41.04	41.42	24753438
+...	...	...	...	...	...
+3/25/2021 16:00:00	235.30	236.94	231.57	232.34	34061853
+3/26/2021 16:00:00	231.55	236.71	231.55	236.48	25479853
+3/29/2021 16:00:00	236.59	236.80	231.88	235.24	25227455
+3/30/2021 16:00:00	233.53	233.85	231.10	231.85	24792012
+3/31/2021 16:00:00	232.91	239.10	232.39	235.77	43623471
+1511 rows × 5 columns
+
+mk.describe() # describe dataset
+
+Open	High	Low	Close	Volume
+count	1511.000000	1511.000000	1511.000000	1511.000000	1.511000e+03
+mean	107.385976	108.437472	106.294533	107.422091	3.019863e+07
+std	56.691333	57.382276	55.977155	56.702299	1.425266e+07
+min	40.340000	40.740000	39.720000	40.290000	1.016120e+05
+25%	57.860000	58.060000	57.420000	57.855000	2.136213e+07
+50%	93.990000	95.100000	92.920000	93.860000	2.662962e+07
+75%	139.440000	140.325000	137.825000	138.965000	3.431962e+07
+max	245.030000	246.130000	242.920000	244.990000	1.352271e+08
+
+import seaborn as sns
+mk.plot(color='r',y='Close',figsize=(20,7))# we plot a graph 
+plt.xlabel("Date") # label in x-axis 
+plt.ylabel(' Value')# label in y-axis
+plt.title("Munesh",color='b')# this is a title of graph 
+plt.grid(c='yellow')
+plt.show()
+
+k=mk.rolling(5).mean().plot(label='High price')
+k.plot()
+
+As above Mention that our data is seasonal we have to decompose
+<>What is seasonal_decompose?
+
+The seasonal_decompose() function returns a result object. The result object contains arrays to access four pieces of data from the decomposition. For example, the snippet below shows how to decompose a series into trend, seasonal, and residual components assuming an additive model.
+
+from statsmodels.tsa.seasonal import seasonal_decompose
+s=seasonal_decompose(mk['Close'],freq=1)
+s.plot();
+
+ax = plt.subplots(figsize = (12,7))
+plt.subplot(2,1,1)  
+sns.distplot(mk.Close,color="orange",label=" Price");
+plt.title("Close",fontsize = 20,color='blue')
+plt.xlabel('Close',fontsize = 15,color='blue')
+plt.legend()
+plt.grid()
+#
+'''plt.subplot(2,1,2)
+sns.distplot(mk.Sales_quantity	,color="darkblue",label="Close Price");
+plt.title(" Sales_quantity	",fontsize = 20,color='blue')
+plt.xlabel('Sales_quantity	',fontsize = 15,color='blue')
+plt.tight_layout()
+plt.legend()
+plt.grid()'''
